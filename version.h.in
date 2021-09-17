@@ -4,19 +4,8 @@
 #ifndef @UPPERCASE_PROJECT_NAME@__VERSION_H_
 #define @UPPERCASE_PROJECT_NAME@__VERSION_H_
 
-#define MANAGED_PLATFORM @MANAGED_PLATFORM@
-#define MANAGED_PLATFORM_VERSION @MANAGED_PLATFORM_VERSION@
-#define REVISION_NUM @REVISION_NUM@
-#define REPOSITORY @REPOSITORY@
-
-#if MANAGED_PLATFORM == ""
-#   define MANAGED_CODE_INFO {\
-        MANAGED_PLATFORM, " version ", MANAGED_PLATFORM_VERSION, \
-        "repo url: ", REPOSITORY \
-        }
-#else
-#   define MANAGED_CODE_INFO "no managed info."
-#endif 
+#define REPOSITORY "@REPOSITORY@"
+#define REVISION_NUM "@REVISION_NUM@"
 
 // Example of __DATE__ string: "May 14 2020"
 //                              012345678910
