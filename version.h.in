@@ -64,29 +64,27 @@
 #define BUILD_SEC_CH0 (__TIME__[6])
 #define BUILD_SEC_CH1 (__TIME__[7])
 
-// May 14 2020 19:34:54
-#define BUILD_TIME_STR1 {"build time: ",__DATE__,' ',__TIME__,'\0'}
-// 2020-05-14 19:34:54
-#define BUILD_TIME_STR2 {"build time: ",\
-    BUILD_YEAR_CH0, BUILD_YEAR_CH1,\
-    BUILD_YEAR_CH2, BUILD_YEAR_CH3,\
-    '-', BUILD_MONTH_CH0, BUILD_MONTH_CH1,\
-    '-', BUILD_DAY_CH0, BUILD_DAY_CH1,\
-    ' ',__TIME__,\
-    '\0'\
-}
-// 20200514.1934
-#define BUILD_TIME_STR3 {\
-    BUILD_YEAR_CH0, BUILD_YEAR_CH1,\
-    BUILD_YEAR_CH2, BUILD_YEAR_CH3,\
-    BUILD_MONTH_CH0, BUILD_MONTH_CH1,\
-    BUILD_DAY_CH0, BUILD_DAY_CH1,\
-    '.',\
-    BUILD_HOUR_CH0, BUILD_HOUR_CH1,\
-    BUILD_MIN_CH0, BUILD_MIN_CH1,\
-    '\0'\
-}
-
-
+//// May 14 2020 19:34:54
+//#define BUILD_TIME_STR1 {"build time: ", __DATE__, ' ', __TIME__, '\0'}
+//// 2020-05-14 19:34:54
+//#define BUILD_TIME_STR2 ("build time: ",\
+//    BUILD_YEAR_CH0, BUILD_YEAR_CH1,\
+//    BUILD_YEAR_CH2, BUILD_YEAR_CH3,\
+//    '-', BUILD_MONTH_CH0, BUILD_MONTH_CH1,\
+//    '-', BUILD_DAY_CH0, BUILD_DAY_CH1,\
+//    ' ',__TIME__,\
+//    '\0'\
+//)
+//// 20200514.1934
+//#define BUILD_TIME_STR3 {\
+//    BUILD_YEAR_CH0, BUILD_YEAR_CH1,\
+//    BUILD_YEAR_CH2, BUILD_YEAR_CH3,\
+//    BUILD_MONTH_CH0, BUILD_MONTH_CH1,\
+//    BUILD_DAY_CH0, BUILD_DAY_CH1,\
+//    '.',\
+//    BUILD_HOUR_CH0, BUILD_HOUR_CH1,\
+//    BUILD_MIN_CH0, BUILD_MIN_CH1,\
+//    '\0'\
+//}
 
 #endif // @UPPERCASE_PROJECT_NAME@__VERSION_H_
