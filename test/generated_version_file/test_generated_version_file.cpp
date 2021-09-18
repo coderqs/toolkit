@@ -11,7 +11,7 @@ void ShowVersionInfo(void) {
         '-' << BUILD_MONTH_CH0 << BUILD_MONTH_CH1 <<
         '-' << BUILD_DAY_CH0 << BUILD_DAY_CH1 <<
         ' ' << __TIME__<< std::endl;
-    std::cout << BUILD_TIME_STR2 << std::endl;
+    //std::cout << BUILD_TIME_STR2 << std::endl;
     //std::cout << BUILD_TIME_STR3 << std::endl;
 }
 
