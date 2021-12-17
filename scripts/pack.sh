@@ -6,9 +6,26 @@ optim="${4:-"release"}"
 
 # 项目名称，输出的程序名、头文件目录都要和这个名字一致
 project_name=""
-#project_root=..
+project_root=..
 output_path="../out"
+contains_attached_files_os=(\
+)
+attached_files=(\ # 除了默认会被打包以外的文件，需要写从 project_root 开始的相对路径
+)
 use_std_dir_struct=true
+# --------- 不是标准的目录结构需要手动指定下面的这些值 ------------
+program_path_bin=
+program_path_lib=
+program_path_inc=
+program_path_symbol=
+program_path_conf=
+program_path_doc=
+
+program_pr_lib=
+program_ext_exe=
+program_ext_static_lib=
+program_ext_shared_lib=
+program_ext_symbol=
 
 # ----------------------------
 outpath_bin=
@@ -17,20 +34,6 @@ outpath_inc=
 outpath_symbol=
 outpath_conf=
 outpath_doc=
-
-program_path_bin=
-program_path_lib=
-program_path_inc=
-program_path_symbol=
-program_path_conf=
-program_path_doc=
-
-program_ext_exe=
-program_ext_static_lib=
-program_ext_shared_lib=
-program_ext_symbol=
-# ----------------------------
-
 
 function CreateOutDirStruct(){
     _outpath="$1"
@@ -97,9 +100,10 @@ function LinuxOSPackEnvSet(){
         program_path_conf=../config
         program_path_doc=../doc
         
+        program_pr_lib="lib"
         program_ext_exe=
-        program_ext_static_lib=".a"
-        program_ext_shared_lib=".so"
+        program_ext_static_lib="a"
+        program_ext_shared_lib="so"
         program_ext_symbol=
     fi
     ShowEnvInfo
@@ -115,6 +119,7 @@ function WindwosOSPackEnvSet(){
         program_path_conf=../config
         program_path_doc=../doc
         
+        program_pr_lib=
         program_ext_exe=".exe"
         program_ext_static_lib=".lib"
         program_ext_shared_lib=".dll"
@@ -128,21 +133,22 @@ function AndroidOSPackEnvSet(){
     if ${use_std_dir_struct}; then
         _arch=
         if [ "${arch_type}" = "x64" ]; then
-            _arch="armv8"
+            _arch="arm64-v8a"
         else
-            _arch="armeabi"
+            _arch="armeabi-v7a"
         fi
 
         program_path_bin=../builds/android/libs/${_arch}
         program_path_lib=${program_path_bin}
         program_path_inc=../include
-        program_path_symbol=../builds/android/objs/${_arch}
+        program_path_symbol=../builds/android/obj/local/${_arch}
         program_path_conf=../config
         program_path_doc=../doc
         
+        program_pr_lib="lib"
         program_ext_exe=
-        program_ext_static_lib=".a"
-        program_ext_shared_lib=".so"
+        program_ext_static_lib="a"
+        program_ext_shared_lib="so"
         program_ext_symbol=
     fi
     ShowEnvInfo
@@ -191,19 +197,21 @@ function InitPackEnv(){
 function CopyFiles(){
     InitPackEnv 
 
-    cp ${program_path_bin}/"${project_name}"."${program_ext_exe}" "${outpath_bin}" >/dev/null 2>&1
-    cp ${program_path_bin}/"${project_name}"."${program_ext_shared_lib}"* "${outpath_bin}" >/dev/null 2>&1
-    cp ${program_path_lib}/"${project_name}"."${program_ext_shared_lib}"* "${outpath_lib}" >/dev/null 2>&1
-    cp ${program_path_lib}/"${project_name}"."${program_ext_static_lib}"* "${outpath_lib}" >/dev/null 2>&1
+    cp ${program_path_bin}/"${project_name}"."${program_ext_exe}" "${outpath_bin}" #>/dev/null 2>&1
+    cp ${program_path_bin}/${program_pr_lib}"${project_name}"."${program_ext_shared_lib}"* "${outpath_bin}" #>/dev/null 2>&1
+    cp ${program_path_lib}/${program_pr_lib}"${project_name}"."${program_ext_shared_lib}"* "${outpath_lib}" #>/dev/null 2>&1
+    cp ${program_path_lib}/${program_pr_lib}"${project_name}"."${program_ext_static_lib}"* "${outpath_lib}" #>/dev/null 2>&1
     if [[ ${os_type} = "windows" ]]; then                              
-        cp ${program_path_symbol}/"${project_name}"."${program_ext_symbol}" "${outpath_symbol}"
+        cp ${program_path_symbol}/${program_pr_lib}"${project_name}"."${program_ext_symbol}" "${outpath_symbol}"
     elif [[ ${os_type} = "android" ]]; then
-        cp ${program_path_symbol}/"${project_name}"."${program_ext_static_lib}" "${outpath_symbol}" >/dev/null 2>&1
-        cp ${program_path_symbol}/"${project_name}"."${program_ext_shared_lib}" "${outpath_symbol}" >/dev/null 2>&1
+        cp ${program_path_symbol}/${program_pr_lib}"${project_name}"."${program_ext_static_lib}" "${outpath_symbol}" #>/dev/null 2>&1
+        cp ${program_path_symbol}/${program_pr_lib}"${project_name}"."${program_ext_shared_lib}" "${outpath_symbol}" #>/dev/null 2>&1
     fi
     cp ${program_path_conf}/* "${outpath_conf}"
     cp ${program_path_doc}/* "${outpath_doc}"
     cp -R ${program_path_inc}/"${project_name}" "${outpath_inc}"
+
+    #for _os in ${contains_attached_files_os[@]}
 }
 
 function main(){
