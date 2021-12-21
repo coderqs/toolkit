@@ -1,4 +1,8 @@
 #! /bin/bash
+# 该脚本用于在 linux 下自动配置 ndk 的环境变量文件。
+# 生成的环境变量默认存放于 /opt/android-ndk/env 下。
+# 当需要使用时 soucre 环境变量文件即可
+
 ndk_version=$1
 ndk_path=$2 # ndk 的根路径
 deploy_path="${3:-"/opt/android-ndk"}"
