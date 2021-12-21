@@ -6,6 +6,8 @@ optim="${4:-"release"}"
 
 # 项目名称，输出的程序名、头文件目录都要和这个名字一致
 project_name=""
+program_name="${project_name}"
+header_file_dir_name="${program_name}"
 project_root=..
 output_path="../out"
 contains_attached_files_os=(\
@@ -21,7 +23,7 @@ program_path_symbol=
 program_path_conf=
 program_path_doc=
 
-program_pr_lib=
+program_pr_lib=     # 库文件的前缀
 program_ext_exe=
 program_ext_static_lib=
 program_ext_shared_lib=
@@ -197,19 +199,19 @@ function InitPackEnv(){
 function CopyFiles(){
     InitPackEnv 
 
-    cp ${program_path_bin}/"${project_name}"."${program_ext_exe}" "${outpath_bin}" #>/dev/null 2>&1
-    cp ${program_path_bin}/${program_pr_lib}"${project_name}"."${program_ext_shared_lib}"* "${outpath_bin}" #>/dev/null 2>&1
-    cp ${program_path_lib}/${program_pr_lib}"${project_name}"."${program_ext_shared_lib}"* "${outpath_lib}" #>/dev/null 2>&1
-    cp ${program_path_lib}/${program_pr_lib}"${project_name}"."${program_ext_static_lib}"* "${outpath_lib}" #>/dev/null 2>&1
+    cp ${program_path_bin}/"${program_name}"."${program_ext_exe}" "${outpath_bin}" #>/dev/null 2>&1
+    cp ${program_path_bin}/${program_pr_lib}"${program_name}"."${program_ext_shared_lib}"* "${outpath_bin}" #>/dev/null 2>&1
+    cp ${program_path_lib}/${program_pr_lib}"${program_name}"."${program_ext_shared_lib}"* "${outpath_lib}" #>/dev/null 2>&1
+    cp ${program_path_lib}/${program_pr_lib}"${program_name}"."${program_ext_static_lib}"* "${outpath_lib}" #>/dev/null 2>&1
     if [[ ${os_type} = "windows" ]]; then                              
-        cp ${program_path_symbol}/${program_pr_lib}"${project_name}"."${program_ext_symbol}" "${outpath_symbol}"
+        cp ${program_path_symbol}/${program_pr_lib}"${program_name}"."${program_ext_symbol}" "${outpath_symbol}"
     elif [[ ${os_type} = "android" ]]; then
-        cp ${program_path_symbol}/${program_pr_lib}"${project_name}"."${program_ext_static_lib}" "${outpath_symbol}" #>/dev/null 2>&1
-        cp ${program_path_symbol}/${program_pr_lib}"${project_name}"."${program_ext_shared_lib}" "${outpath_symbol}" #>/dev/null 2>&1
+        cp ${program_path_symbol}/${program_pr_lib}"${program_name}"."${program_ext_static_lib}" "${outpath_symbol}" #>/dev/null 2>&1
+        cp ${program_path_symbol}/${program_pr_lib}"${program_name}"."${program_ext_shared_lib}" "${outpath_symbol}" #>/dev/null 2>&1
     fi
     cp ${program_path_conf}/* "${outpath_conf}"
     cp ${program_path_doc}/* "${outpath_doc}"
-    cp -R ${program_path_inc}/"${project_name}" "${outpath_inc}"
+    cp -R ${program_path_inc}/"${header_file_dir_name}" "${outpath_inc}"
 
     #for _os in ${contains_attached_files_os[@]}
 }
