@@ -7,3 +7,6 @@
 [submodule "3rdparty/spdlog"]
 	path = 3rdparty/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "3rdparty/ios-cmake"]
+	path = 3rdparty/ios-cmake
+	url = https://github.com/leetal/ios-cmake.git
