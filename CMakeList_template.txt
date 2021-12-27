@@ -3,3 +3,13 @@ cmake_minimum_required(VERSION 3.0)
 project()
 
 include(${CMAKE_SOURCE_DIR}/cmake/generate_version_file.cmake)
+
+set(PROJECT_SOURCE 
+    
+)
+
+include_directories()
+link_directories()
+
+add_library( STATIC )
+add_executable( ${PROJECT_SOURCE})

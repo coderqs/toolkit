@@ -1,0 +1,4 @@
+cmake_minimum_required(VERSION 3.0)
+
+add_subdirectory(generated_version_file)
+add_subdirectory(design_pattern)
