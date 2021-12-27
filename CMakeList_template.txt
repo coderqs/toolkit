@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.0)
+
+project()
+
+include(${CMAKE_SOURCE_DIR}/cmake/generate_version_file.cmake)
