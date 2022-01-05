@@ -1,8 +1,34 @@
 #!/bin/bash
+script_abs=$(readlink -f "$0")
+script_dir=$(dirname $script_abs)
+cd ${script_dir}
+
 program_version="$1" # 输出的程序的版本号
 os_type="${2:-"linux"}"
 arch_type="${3:-"x64"}"
 optim="${4:-"release"}"
+
+version_file=../VERSION
+
+#### Error Code ####
+#   0   成功
+#   2   没有输入程序的版本号，并且也没有 VERSION 文件
+#   3   没有安装 zip，退出压缩
+#   4   未知的平台
+#   5   Linux 平台环境设置失败
+
+
+if [ -z ${program_version} ]; then
+    if [ -e ${version_file} ]; then
+        declare `grep MAJOR ${version_file}` 
+        declare `grep MINOR ${version_file}` 
+        declare `grep PATCH ${version_file}` 
+        program_version="${MAJOR}.${MINOR}.${PATCH}"
+        echo "from the file get version num: ${program_version}"
+    else 
+        return 2
+    fi
+fi
 
 # 项目名称，输出的程序名、头文件目录都要和这个名字一致
 project_name=""
@@ -66,7 +92,7 @@ function GeneratePackageName(){
 function CreateZipPack(){
     if ! type zip >/dev/null 2>&1; then
         echo "zip 未安装，不执行压缩操作";
-        return 1
+        return 3
     fi
     _package_name="$1"
     zip -qr "${_package_name}.zip" "${_package_name}"
@@ -171,7 +197,7 @@ function IsLinux(){
     if Strcmp "redhat" "${os_type}"; then
         return 0
     fi
-    return 1
+    return 5
 }
 
 function IsAndroid(){
@@ -193,11 +219,14 @@ function InitPackEnv(){
     if IsAndroid; then
         AndroidOSPackEnvSet
     fi
-    return 1
+    return 4
 }
 
 function CopyFiles(){
-    InitPackEnv 
+    if ! InitPackEnv; then
+        echo "set env fail $?"
+        exit()
+    fi
 
     cp ${program_path_bin}/"${program_name}"."${program_ext_exe}" "${outpath_bin}" #>/dev/null 2>&1
     cp ${program_path_bin}/${program_pr_lib}"${program_name}"."${program_ext_shared_lib}"* "${outpath_bin}" #>/dev/null 2>&1
@@ -213,7 +242,6 @@ function CopyFiles(){
     cp ${program_path_doc}/* "${outpath_doc}"
     cp -R ${program_path_inc}/"${header_file_dir_name}" "${outpath_inc}"
 
-    #for _os in ${contains_attached_files_os[@]}
 }
 
 function main(){

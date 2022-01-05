@@ -11,5 +11,7 @@ set(PROJECT_SOURCE
 include_directories()
 link_directories()
 
-add_library( STATIC )
-add_executable( ${PROJECT_SOURCE})
+add_library(@library_name STATIC ${PROJECT_SOURCE})
+add_executable(@exe_name ${PROJECT_SOURCE})
+
+target_link_linraries(@library_or_exe_name @link_list)

@@ -4,5 +4,10 @@ project(sample_generated_version_file)
 
 include(${CMAKE_SOURCE_DIR}/cmake/generate_version_file.cmake)
 
-#include_directories(${CMAKE_SOURCE_DIR})
-add_executable(sample_generated_version_file sample_generated_version_file.cpp)
+set(PROJECT_SOURCE 
+    sample_generated_version_file.cpp
+)
+
+include_directories(${CMAKE_SOURCE_DIR}/toolkit)
+
+add_executable(sample_generated_version_file ${PROJECT_SOURCE})
