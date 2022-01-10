@@ -4,9 +4,9 @@
 #define PRODUCT_SWITCH_BEGIN() \
     AbstractProduct* product = NULL; 
 
-#define PRODUCT_SWITCH(macro_tag) \
-    if (strcmp(tag, #macro_tag) == 0) {\
-        product = new macro_tag; \
+#define PRODUCT_SWITCH(tag_) \
+    if (strcmp(tag, #tag_) == 0) {\
+        product = new tag_; \
     }
 
 #define PRODUCT_SWITCH_END() \
