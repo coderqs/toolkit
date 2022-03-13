@@ -6,7 +6,6 @@ include(${CMAKE_SOURCE_DIR}/cmake/generate_version_file.cmake)
 
 set(PROJECT_SOURCE 
     ./library_show_version.cpp
-    ./version.cpp
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
