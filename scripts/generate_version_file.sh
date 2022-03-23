@@ -11,7 +11,7 @@ cd ${script_dir}
 
 project_name="${1:-""}"
 project_name=$(echo ${project_name} | tr 'a-z' 'A-Z')
-source_path="../toolkit"
+source_path="${2:-""}"
 version_file="../VERSION"
 
 revision_num=
@@ -27,6 +27,8 @@ fi
 program_version_major=
 program_version_minor=
 program_version_patch=
+program_version_build=
+program_version_revision=
 
 function GetVersion(){
     declare `grep MAJOR ${version_file}` 

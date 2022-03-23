@@ -2,16 +2,79 @@ cmake_minimum_required(VERSION 3.0)
 
 project()
 
+# execute_process(COMMAND sh "generate_version_file.sh ${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/src" WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/scripts)
 include(${CMAKE_SOURCE_DIR}/cmake/generate_version_file.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/common_base_setting.cmake)
 
-set(PROJECT_SOURCE 
+# base setting
+set(${PROJECT_NAME} OUTPUT_NAME)
+set (PATH_DPD_INCLUDE $ENV{DROOT}/${TARGET_PLATFORM}/include)
+set (PATH_DPD_LIBRARY $ENV{DROOT}/${TARGET_PLATFORM}/lib)
+message(STATUS, ${PATH_DPD_INCLUDE})
+message(STATUS, ${PATH_DPD_LIBRARY})
+
+include_directories(${PATH_DPD_INCLUDE})
+link_directories(${PATH_DPD_LIBRARY})
+
+## link library list
+if (TARGET_PLATFORM AND (TARGET_PLATFORM STREQUAL ""))
+    set(LINK_LIB_LIST 
+        ""
+    )
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w -Wno-invalid-offsetof -fvisibility=hidden --no-gnu-unique")
     
-)
+else if (TARGET_PLATFORM AND (TARGET_PLATFORM STREQUAL ""))
+    set(LINK_LIB_LIST 
+        ""
+    )
+    
+else()
+    set(LINK_LIB_LIST 
+        ""
+    )
+    
+endif()
 
-include_directories()
-link_directories()
+## source code
+AUX_SOURCE_DIRECTORY(./src PROJEST_SOURCES)
+### other methods
+# set(PROJEST_SOURCES 
+#   enumerate the files here
+#   ) 
+message(STATUS, ${PROJEST_SOURCES})
 
-add_library(@library_name STATIC ${PROJECT_SOURCE})
-add_executable(@exe_name ${PROJECT_SOURCE})
+## compile option
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -pthread -Wl,-rpath=.") # -Wl,-Bsymbolic -Wno-invalid-offsetof -fvisibility=hidden --no-gnu-unique -fsanitize=address
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-target_link_linraries(@library_or_exe_name @link_list)
+if (BUILD_EXECUTABLE)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    
+    add_executable(${OUTPUT_NAME} ${PROJEST_SOURCES})
+else() 
+    if (BUILD_SHARED_LIBS)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+        add_library(${OUTPUT_NAME} SHARED ${PROJEST_SOURCES})
+        
+    else()
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+        add_library(${OUTPUT_NAME} STATIC ${PROJEST_SOURCES})
+        
+    endif() # if (BUILD_SHARED_LIBS)
+endif() # if (BUILD_EXECUTABLE)
+
+message(STATUS "CMAKE_C_FLAGS: ${CMAKE_C_FLAGS}")
+message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
+
+target_link_libraries(${OUTPUT_NAME} ${LINK_LIB_LIST})
+
+## install
+install(TARGETS ${OUTPUT_NAME}
+        LIBRARY DESTINATION lib  # shared library install path
+        ARCHIVE DESTINATION lib  # static library install path
+        RUNTIME DESTINATION bin  # executable program install path
+        PUBLIC_HEADER DESTINATION include    # header files install path
+        )
