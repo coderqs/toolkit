@@ -1,15 +1,4 @@
 #!/bin/bash
-script_abs=$(readlink -f "$0")
-script_dir=$(dirname $script_abs)
-cd ${script_dir}
-
-program_version="$1" # 输出的程序的版本号
-os_type="${2:-"linux"}"
-arch_type="${3:-"x64"}"
-optim="${4:-"release"}"
-
-version_file=../VERSION
-
 #### Error Code ####
 #   0   成功
 #   2   没有输入程序的版本号，并且也没有 VERSION 文件
@@ -17,31 +6,31 @@ version_file=../VERSION
 #   4   未知的平台
 #   5   Linux 平台环境设置失败
 
+os_type="${1:-"linux"}"
+arch_type="${2:-"x64"}"
+optim="${3:-"release"}"
+program_version="${4:-""}"
 
-if [ -z ${program_version} ]; then
-    if [ -e ${version_file} ]; then
-        declare `grep MAJOR ${version_file}` 
-        declare `grep MINOR ${version_file}` 
-        declare `grep PATCH ${version_file}` 
-        program_version="${MAJOR}.${MINOR}.${PATCH}"
-        echo "from the file get version num: ${program_version}"
-    else 
-        return 2
-    fi
-fi
-
+# 需要针对项目手动添加的部分
 # 项目名称，输出的程序名、头文件目录都要和这个名字一致
 project_name=""
 program_name="${project_name}"
 header_file_dir_name="${program_name}"
-project_root=..
-output_path="../out"
 contains_attached_files_os=(\
 )
 attached_files=(\ # 除了默认会被打包以外的文件，需要写从 project_root 开始的相对路径
 )
+packing_is_exe=true
+packing_is_shared_lib=true
+packing_is_static_lib=true
+
 use_std_dir_struct=true
+
 # --------- 不是标准的目录结构需要手动指定下面的这些值 ------------
+project_root=".."
+output_path="${project_root}/out"
+version_file="${project_root}/VERSION"
+
 program_path_bin=
 program_path_lib=
 program_path_inc=
@@ -62,6 +51,25 @@ outpath_inc=
 outpath_symbol=
 outpath_conf=
 outpath_doc=
+
+## ----- function -----
+function ChangeToScriptsDir(){
+    script_abs=$(readlink -f "$1")
+    script_dir=$(dirname $script_abs)
+    cd ${script_dir}
+    pwd
+}
+
+function ReadVersion(){
+    if [ -e ${version_file} ]; then
+        while read line do
+            eval ${line}
+        done < ${version_file}
+        program_version="${MAJOR}.${MINOR}.${PATCH}"
+    else
+        echo "[Error] \"VERSION\" file not exist!"
+    fi 
+}
 
 function CreateOutDirStruct(){
     _outpath="$1"
@@ -253,4 +261,6 @@ function main(){
     CreateZipPack "${package_name}"
 }
 
+## ----- run -----
+ChangeToScriptsDir $0
 main
