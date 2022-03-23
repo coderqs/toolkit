@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 project()
 
+# execute_process(COMMAND sh "generate_version_file.sh ${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/src" WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/scripts)
 include(${CMAKE_SOURCE_DIR}/cmake/generate_version_file.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/common_base_setting.cmake)
 
@@ -51,7 +52,7 @@ if (BUILD_EXECUTABLE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
     
     add_executable(${OUTPUT_NAME} ${PROJEST_SOURCES})
-else 
+else() 
     if (BUILD_SHARED_LIBS)
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")

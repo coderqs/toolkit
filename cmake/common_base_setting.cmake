@@ -4,10 +4,10 @@ cmake_minimum_required(VERSION 3.0)
 if (NOT DEFINED BUILD_EXECUTABLE)
     option(BUILD_SHARED_LIBS "" ON)
     message("default build shared librarys.")
-else
+else()
     option(BUILD_EXECUTABLE "" ON)
     message("build executable.")
-endif 
+endif() 
 
 if (NOT DEFINED TARGET_PLATFORM)
     set(TARGET_PLATFORM "linux")
