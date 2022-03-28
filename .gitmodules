@@ -10,3 +10,9 @@
 [submodule "3rdparty/ios-cmake"]
 	path = 3rdparty/ios-cmake
 	url = https://github.com/leetal/ios-cmake.git
+[submodule "3rdparty/cmdline"]
+	path = 3rdparty/cmdline
+	url = https://github.com/tanakh/cmdline.git
+[submodule "3rdparty/log4cpp"]
+	path = 3rdparty/log4cpp
+	url = https://github.com/orocos-toolchain/log4cpp.git
