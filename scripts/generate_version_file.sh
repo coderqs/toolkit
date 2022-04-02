@@ -1,10 +1,10 @@
 #!/bin/bash
-# 用于生成 version.h 和 version.cpp 文件
+# 用于非 CMake 工程生成 version.h 和 version.cpp 文件
+# 版本信息默认从 VERSION 文件中获取
 #
-#### Error Code #####
-#   0   成功
-#   1   文件已存在
-#   
+
+set -e
+
 script_abs=$(readlink -f "$0")
 script_dir=$(dirname $script_abs)
 cd ${script_dir}
@@ -22,6 +22,9 @@ if  $(git --version); then
 elif  $(svn --version); then
     revision_num=$(svnversion)
     repository="Svn"
+else 
+    revision_num=""
+    repository=""
 fi
 
 program_version_major=
@@ -30,7 +33,18 @@ program_version_patch=
 program_version_build=
 program_version_revision=
 
+function ShwoInfo(){
+    echo "project_name: ${project_name}"
+    echo "repository: ${repository} revision_num: ${revision_num}"
+    echo "version: ${program_version_major}.${program_version_minor}.${program_version_patch}.${program_version_build}.${program_version_revision}"
+}
+
 function GetVersion(){
+    if [ -e "${version_file}" ]; then
+        echo "not found file ${version_file}"
+        exit 1
+    fi
+
     declare `grep MAJOR ${version_file}` 
     program_version_major=${MAJOR}
     declare `grep MINOR ${version_file}` 
@@ -41,9 +55,6 @@ function GetVersion(){
 
 function GenerateVersionHeadFile(){
     file_version_h=${source_path}/version.h
-    if [ -e "${file_version_h}" ]; then
-        return 1
-    fi
 
     GetVersion 
 
@@ -65,9 +76,6 @@ EOF
 
 function GenerateVersionCppFile(){
     file_version_cpp=${source_path}/version.cpp
-    if [ -e "${file_version_cpp}" ]; then
-        return 1
-    fi
 
     GenerateVersionHeadFile
 
@@ -107,6 +115,7 @@ EOF
 
 function main() {
     GenerateVersionCppFile
+    ShwoInfo
 }
 
 main
