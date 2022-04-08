@@ -7,11 +7,14 @@ include(${CMAKE_SOURCE_DIR}/cmake/generate_version_file.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/common_base_setting.cmake)
 
 # base setting
-set(${PROJECT_NAME} OUTPUT_NAME)
-set (PATH_DPD_INCLUDE $ENV{DROOT}/${TARGET_PLATFORM}/include)
-set (PATH_DPD_LIBRARY $ENV{DROOT}/${TARGET_PLATFORM}/lib)
+if (NOT DEFINED OUTPUT_NAME)
+    set(OUTPUT_NAME ${PROJECT_NAME})
+endif()
+set(PATH_DPD_INCLUDE $ENV{DROOT}/${TARGET_PLATFORM}/include)
+set(PATH_DPD_LIBRARY $ENV{DROOT}/${TARGET_PLATFORM}/lib)
 message(STATUS, ${PATH_DPD_INCLUDE})
 message(STATUS, ${PATH_DPD_LIBRARY})
+message(STATUS, ${OUTPUT_NAME})
 
 include_directories(${PATH_DPD_INCLUDE})
 link_directories(${PATH_DPD_LIBRARY})
@@ -23,7 +26,7 @@ if (TARGET_PLATFORM AND (TARGET_PLATFORM STREQUAL ""))
     )
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w -Wno-invalid-offsetof -fvisibility=hidden --no-gnu-unique")
     
-else if (TARGET_PLATFORM AND (TARGET_PLATFORM STREQUAL ""))
+elseif (TARGET_PLATFORM AND (TARGET_PLATFORM STREQUAL ""))
     set(LINK_LIB_LIST 
         ""
     )
