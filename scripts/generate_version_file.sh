@@ -11,7 +11,7 @@ cd ${script_dir}
 
 project_name="${1:-""}"
 project_name=$(echo ${project_name} | tr 'a-z' 'A-Z')
-source_path="${2:-""}"
+source_path="${2:-"../src"}"
 version_file="../VERSION"
 
 revision_num=
@@ -40,7 +40,7 @@ function ShwoInfo(){
 }
 
 function GetVersion(){
-    if [ -e "${version_file}" ]; then
+    if [ ! -e "${version_file}" ]; then
         echo "not found file ${version_file}"
         exit 1
     fi
@@ -51,6 +51,10 @@ function GetVersion(){
     program_version_minor=${MINOR}
     declare `grep PATCH ${version_file}` 
     program_version_patch=${PATCH}
+    declare `grep BUILD ${version_file}` 
+    program_version_build=${BUILD}
+    #declare `grep REVISION ${version_file}` 
+    #program_version_revision=${REVISION}
 }
 
 function GenerateVersionHeadFile(){
@@ -69,6 +73,8 @@ function GenerateVersionHeadFile(){
 #define PROGRAM_VERSION_MAJOR "${program_version_major}" 
 #define PROGRAM_VERSION_MINOR "${program_version_minor}"  
 #define PROGRAM_VERSION_PATCH "${program_version_patch}"
+#define PROGRAM_VERSION_BUILD "${program_version_build}"
+#define PROGRAM_VERSION_REVISION "${program_version_revision}"
 
 #endif // ${project_name}__VERSION_H_
 EOF
@@ -90,7 +96,14 @@ const char interp[] __attribute__((section(".interp"))) = "/lib/ld-linux.so.2";
 #include <unistd.h>
 
 static const char banner[] =
-PROGRAM_NAME " " PROGRAM_VERSION_MAJOR "." PROGRAM_VERSION_MINOR "." PROGRAM_VERSION_PATCH "\n" \\
+PROGRAM_NAME " " PROGRAM_VERSION_MAJOR "." PROGRAM_VERSION_MINOR "." PROGRAM_VERSION_PATCH \\
+#if PROGRAM_VERSION_BUILD
+"." PROGRAM_VERSION_BUILD \\
+#endif
+#if PROGRAM_VERSION_REVISION
+"." PROGRAM_VERSION_REVISION \\
+#endif 
+"\n" \\
 "Build in " __DATE__ __TIME__ " (for Linux platform)\n" \\
 "Managed on " REPOSITORY " revision num: " REVISION_NUM "\n" \\
 "Copyright (C) all rights reserved \n";
