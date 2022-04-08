@@ -11,7 +11,7 @@ endif()
 
 if (NOT DEFINED TARGET_PLATFORM)
     set(TARGET_PLATFORM "linux")
-    message(WARNING "not target platform specified, default set is \"linux\"")
+    message(STATUS "not target platform specified, default set is \"linux\"")
 endif()
 
 # build type
