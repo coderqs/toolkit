@@ -44,6 +44,7 @@ cmake_install.cmake
 
 # vs
 CMakeSettings.json
+*/out/
 
 version.h
 version.cpp
