@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 project()
 
-# execute_process(COMMAND sh "generate_version_file.sh ${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/src" WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/scripts)
+# execute_process(COMMAND sh "${CMAKE_SOURCE_DIR}/scripts/generate_version_file.sh ${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/src" WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/scripts)
 include(${CMAKE_SOURCE_DIR}/cmake/generate_version_file.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/common_base_setting.cmake)
 
@@ -10,8 +10,8 @@ include(${CMAKE_SOURCE_DIR}/cmake/common_base_setting.cmake)
 if (NOT DEFINED OUTPUT_NAME)
     set(OUTPUT_NAME ${PROJECT_NAME})
 endif()
-set(PATH_DPD_INCLUDE $ENV{DROOT}/${TARGET_PLATFORM}/include)
-set(PATH_DPD_LIBRARY $ENV{DROOT}/${TARGET_PLATFORM}/lib)
+set(PATH_DPD_INCLUDE $ENV{DROOT}/include)
+set(PATH_DPD_LIBRARY $ENV{DROOT}/lib)
 message(STATUS, ${PATH_DPD_INCLUDE})
 message(STATUS, ${PATH_DPD_LIBRARY})
 message(STATUS, ${OUTPUT_NAME})
@@ -22,18 +22,18 @@ link_directories(${PATH_DPD_LIBRARY})
 ## link library list
 if (TARGET_PLATFORM AND (TARGET_PLATFORM STREQUAL ""))
     set(LINK_LIB_LIST 
-        ""
+        
     )
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w -Wno-invalid-offsetof -fvisibility=hidden --no-gnu-unique")
     
 elseif (TARGET_PLATFORM AND (TARGET_PLATFORM STREQUAL ""))
     set(LINK_LIB_LIST 
-        ""
+        
     )
     
 else()
     set(LINK_LIB_LIST 
-        ""
+        
     )
     
 endif()
