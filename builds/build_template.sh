@@ -25,7 +25,7 @@ fi
 mkdir build && cd build
 
 ## Брвы
-export DROOT=${DROOT}
+export DROOT=${DROOT}/${TARGET_PLATFORM}
 
 cmake ${PROJECT_ROOT} \
       -DTARGET_PLATFORM=${TARGET_PLATFORM}
