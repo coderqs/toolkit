@@ -2,9 +2,8 @@ cmake_minimum_required(VERSION 3.0)
 
 project(sample_design_pattern)
 
+aux_source_directory(${CMAKE_SOURCE_DIR}/samples/design_pattern PROJEST_SOURCES)
+message(status ${PROJEST_SOURCES})
+
 include_directories(${CMAKE_SOURCE_DIR}/toolkit)
-<<<<<<< Updated upstream
-add_executable(sample_design_pattern sample_design_pattern.cpp "sample_dp_sigleton.h" "sample_dp_factory.h")
-=======
-add_executable(sample_design_pattern sample_design_pattern.cpp "sample_dp_facade.h")
->>>>>>> Stashed changes
+add_executable(${PROJECT_NAME} ${PROJEST_SOURCES} )

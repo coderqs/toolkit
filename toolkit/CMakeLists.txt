@@ -6,15 +6,12 @@ include(${CMAKE_SOURCE_DIR}/cmake/generate_version_file.cmake)
 
 set(PROJECT_SOURCE 
     ./library_show_version.cpp
-<<<<<<< Updated upstream
-=======
     ./main.cpp
->>>>>>> Stashed changes
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 link_directories(${CMAKE_SOURCE_DIR}/lib)
 
-add_library(toolkit STATIC ${PROJECT_SOURCE} "DesignPattern/Factory.h")
+add_library(toolkit STATIC ${PROJECT_SOURCE})
 
 
