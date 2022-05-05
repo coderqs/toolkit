@@ -5,6 +5,7 @@
 #   3   没有安装 zip，退出压缩
 #   4   未知的平台
 #   5   Linux 平台环境设置失败
+set -e
 
 os_type="${1:-"linux"}"
 arch_type="${2:-"x64"}"
@@ -55,17 +56,18 @@ outpath_doc=
 ## ----- function -----
 function ChangeToScriptsDir(){
     script_abs=$(readlink -f "$1")
-    script_dir=$(dirname $script_abs)
-    cd ${script_dir}
+    script_dir=$(dirname "${script_abs}")
+    cd "${script_dir}"
     pwd
 }
 
 function ReadVersion(){
     if [ -e ${version_file} ]; then
-        while read line do
-            eval ${line}
-        done < ${version_file}
+        for line in $(cat ${version_file}); do
+            eval "${line}"
+        done
         program_version="${MAJOR}.${MINOR}.${PATCH}"
+        echo ${program_version}
     else
         echo "[Error] \"VERSION\" file not exist!"
     fi 
@@ -73,7 +75,7 @@ function ReadVersion(){
 
 function CreateOutDirStruct(){
     _outpath="$1"
-    
+    echo "CreateOutDirStruct ${_outpath}"
     mkdir -p "${_outpath}"/{binary,library,include,pdb,config,doc}
 
     outpath_bin=${_outpath}/binary
@@ -231,9 +233,12 @@ function InitPackEnv(){
 }
 
 function CopyFiles(){
-    if ! InitPackEnv; then
+    echo "CopyFiles"
+    ret=$(InitPackEnv)
+    echo "ret: ${ret}"
+    if [ ${ret} -ne 0 ]; then
         echo "set env fail $?"
-        exit()
+        exit
     fi
 
     cp ${program_path_bin}/"${program_name}"."${program_ext_exe}" "${outpath_bin}" #>/dev/null 2>&1
@@ -253,6 +258,7 @@ function CopyFiles(){
 }
 
 function main(){
+    ReadVersion
     version=$(GenerateFullVersionNum)
     package_name=$(GeneratePackageName "${version}")
     CreateOutDirStruct ${output_path}/"${package_name}"
@@ -262,5 +268,5 @@ function main(){
 }
 
 ## ----- run -----
-ChangeToScriptsDir $0
+ChangeToScriptsDir "$0"
 main

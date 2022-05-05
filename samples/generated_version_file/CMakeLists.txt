@@ -10,4 +10,4 @@ set(PROJECT_SOURCE
 
 include_directories(${CMAKE_SOURCE_DIR}/toolkit)
 
-add_executable(sample_generated_version_file ${PROJECT_SOURCE})
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCE})

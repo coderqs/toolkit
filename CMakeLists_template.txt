@@ -39,7 +39,7 @@ else()
 endif()
 
 ## source code
-AUX_SOURCE_DIRECTORY(./src PROJEST_SOURCES)
+aux_source_directory(./src PROJEST_SOURCES)
 ### other methods
 # set(PROJEST_SOURCES 
 #   enumerate the files here

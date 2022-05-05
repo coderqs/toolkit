@@ -12,6 +12,6 @@ set(PROJECT_SOURCE
 include_directories(${CMAKE_SOURCE_DIR}/include)
 link_directories(${CMAKE_SOURCE_DIR}/lib)
 
-add_library(toolkit STATIC ${PROJECT_SOURCE} "DesignPattern/Factory.h")
+add_library(toolkit STATIC ${PROJECT_SOURCE})
 
 
