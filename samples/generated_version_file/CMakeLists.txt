@@ -8,6 +8,7 @@ set(PROJECT_SOURCE
     sample_generated_version_file.cpp
 )
 
+include_directories(${CMAKE_SOURCE_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/toolkit)
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCE})
