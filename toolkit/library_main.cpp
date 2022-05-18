@@ -10,7 +10,7 @@ const char interp[] __attribute__((section(".interp"))) = "/lib/ld-linux.so.2";
 #include <unistd.h>
 
 static const char banner[] =
-PROGRAM_NAME " " PROGRAM_VERSION_MAJOR "." PROGRAM_VERSION_MINOR "." PROGRAM_VERSION_PATCH "\n" \
+PROGRAM_NAME " version " PROGRAM_VERSION_MAJOR "." PROGRAM_VERSION_MINOR "." PROGRAM_VERSION_PATCH "\n" \
 "Build in " __DATE__ __TIME__ " (for Linux platform)\n" \
 "Managed on " REPOSITORY " revision num: " REVISION_NUM "\n" \
 "Copyright (C) all rights reserved QingSong\n";

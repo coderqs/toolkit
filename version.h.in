@@ -80,4 +80,12 @@ void ShowVersionInfo(void) {
         BUILD_DAY_CH0, BUILD_DAY_CH1);
 }
 
+void ShowVersionDetailInfo(void) {
+    printf("%s version %s\s"\
+        "Build in %s %s (for Linux platform)\n" \
+        "Managed on %s revision num: %s\n" \
+        "Copyright (C) all rights reserved QingSong\n", 
+        PROGRAM_NAME, PROGRAM_VERSION, __DATE__, __TIME__, REPOSITORY, REVISION_NUM);
+}
+
 #endif // @UPPERCASE_PROJECT_NAME@__VERSION_H_
