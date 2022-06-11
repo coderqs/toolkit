@@ -16,3 +16,6 @@
 [submodule "3rdparty/log4cpp"]
 	path = 3rdparty/log4cpp
 	url = https://github.com/orocos-toolchain/log4cpp.git
+[submodule "cmake/common"]
+	path = cmake/common
+	url = https://github.com/coderqs/cmakes.git

@@ -12,5 +12,5 @@ string(REGEX MATCH "PATCH=[0-9]+" VERSION_PATCH ${version_file})
 #string(REGEX MATCH "REVISION=[0-9]+" VERSION_REVISION ${version_file})
 message(STATUS "${PROJECT_NAME} version=[${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}]")
 
-configure_file(${CMAKE_SOURCE_DIR}/version.h.in ${CMAKE_SOURCE_DIR}/version.h @ONLY NEWLINE_STYLE LF)
+configure_file(${CMAKE_SOURCE_DIR}/version.h.in ${CMAKE_SOURCE_DIR}/src/version.h @ONLY NEWLINE_STYLE LF)
 message(STATUS "Generate file to ${CMAKE_SOURCE_DIR}/version.h")
