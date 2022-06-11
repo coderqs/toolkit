@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 3.0)
 
+set(PROGRAM_SOURCE_DIR, "${CMAKE_CURRENT_SOURCE_DIR}/src;${CMAKE_CURRENT_SOURCE_DIR}/include")
+
 # build target
 if (NOT DEFINED BUILD_EXECUTABLE)
-    option(BUILD_SHARED_LIBS "" ON)
+    option(BUILD_SHARED_LIBS "Build shared libraries" ON)
     message("default build shared librarys.")
 else()
     option(BUILD_EXECUTABLE "" ON)
