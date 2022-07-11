@@ -19,15 +19,14 @@ outpath_conf=
 outpath_doc=
 
 function LoadYamlScript() {
-#    if [ ! -f yaml.sh ];then
-#        tar -zxvf yaml.tar.gz
-#    fi
-    source yaml.sh
-    echo $?
-#     source ../../3rdparty/bash-yaml/script/yaml.sh
-#    if [ $? ];then 
-#        echo "[Error] load yaml script failure!" && exit 1 
-#    fi
+    source ${SHELL_FOLDER}../../3rdparty/bash-yaml/script/yaml.sh
+    if [ $? ];then 
+        wget https://raw.githubusercontent.com/jasperes/bash-yaml/master/script/yaml.sh
+        source yaml.sh
+        if [ $? ];then
+            echo "[Error] load yaml script failure!" && exit 1 
+        fi
+    fi
 }
 
 function ReadConfig() {
@@ -101,7 +100,7 @@ function CheckOsConfig() {
 function CopyFiles() {
     _conf_full_path=$(cd "$(dirname "${program_config}")";pwd)
     
-    #CheckOsConfig
+    CheckOsConfig
 
     ## pack_info_os_${os_type}_src_binrary_path 
     ## pack_info_os_${os_type}_src_library_path 

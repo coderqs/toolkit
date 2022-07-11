@@ -17,9 +17,9 @@ pack_info:
         library_path: ../../builds/windows/build
         library_list:
           - toolkit.lib
-        include_path: ../../include/toolkit
+        include_path: ../../include
         include_list:
-          - 
+          - toolkit
         symbol_path:
         symbol_list:
           - 
@@ -31,7 +31,7 @@ pack_info:
           - 
         
     centos: 
-      name: linux
+      name: centos
       src:
         binrary_path: ../../builds/linux/build
         binrary_list:
@@ -39,9 +39,9 @@ pack_info:
         library_path: ../../builds/linux/build
         library_list:
           - libtoolkit.a
-        include_path: ../../include/toolkit
+        include_path: ../../include
         include_list:
-          - 
+          - toolkit
         symbol_path:
         symbol_list:
           - 
