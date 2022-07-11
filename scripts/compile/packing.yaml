@@ -1,0 +1,53 @@
+project_name: toolkit # 输出时打包的名字
+version_file: ../../VERSION 
+output_path: ../../out 
+
+program:
+  name: toolkit # 程序的名字
+  type: shared # exe shared static
+  
+pack_info:
+  os:
+    windows:
+      name: windows  
+      src:
+        binrary_path: ../../builds/windows/build
+        binrary_list:
+          - toolkit.dll
+        library_path: ../../builds/windows/build
+        library_list:
+          - toolkit.lib
+        include_path: ../../include/toolkit
+        include_list:
+          - 
+        symbol_path:
+        symbol_list:
+          - 
+        config_path:
+        config_list:
+          - 
+        doc_path:
+        doc_list:
+          - 
+        
+    centos: 
+      name: linux
+      src:
+        binrary_path: ../../builds/linux/build
+        binrary_list:
+          - libtoolkit.so
+        library_path: ../../builds/linux/build
+        library_list:
+          - libtoolkit.a
+        include_path: ../../include/toolkit
+        include_list:
+          - 
+        symbol_path:
+        symbol_list:
+          - 
+        config_path:
+        config_list:
+          - 
+        doc_path:
+        doc_list:
+   
