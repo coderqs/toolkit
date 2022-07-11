@@ -116,40 +116,40 @@ function CopyFiles() {
     ## pack_info_os_${os_type}_src_config_list[*]
     ## pack_info_os_${os_type}_src_doc_list[*]
     
-    _path="${_conf_full_path}/pack_info_os_${os_type}_src_binrary_path"
-    _list="pack_info_os_${os_type}_src_binrary_path[*]"
+    _path="pack_info_os_${os_type}_src_binrary_path"
+    _list="pack_info_os_${os_type}_src_binrary_list[*]"
     for _file in ${!_list};do
-        cp -R "${!_path}/${_file}" "${outpath_bin}"
+        cp -R "${_conf_full_path}/${!_path}/${_file}" "${outpath_bin}"
     done
     
-    _path="${_conf_full_path}/pack_info_os_${os_type}_src_library_path"
+    _path="pack_info_os_${os_type}_src_library_path"
     _list="pack_info_os_${os_type}_src_library_list[*]"
     for _file in ${!_list};do
-        cp -R "${!_path}/${_file}" "${outpath_bin}"
+        cp -R "${_conf_full_path}/${!_path}/${_file}" "${outpath_lib}"
     done
     
-    _path="${_conf_full_path}/pack_info_os_${os_type}_src_include_path"
+    _path="pack_info_os_${os_type}_src_include_path"
     _list="pack_info_os_${os_type}_src_include_list[*]"
     for _file in ${!_list};do
-        cp -R "${!_path}/${_file}" "${outpath_bin}"
+        cp -R "${_conf_full_path}/${!_path}/${_file}" "${outpath_inc}"
     done
     
-    _path="${_conf_full_path}/pack_info_os_${os_type}_src_symbol_path"
+    _path="pack_info_os_${os_type}_src_symbol_path"
     _list="pack_info_os_${os_type}_src_symbol_list[*]"
     for _file in ${!_list};do
-        cp -R "${!_path}/${_file}" "${outpath_bin}"
+        cp -R "${_conf_full_path}/${!_path}/${_file}" "${outpath_symbol}"
     done
     
-    _path="${_conf_full_path}/pack_info_os_${os_type}_src_config_path"
+    _path="pack_info_os_${os_type}_src_config_path"
     _list="pack_info_os_${os_type}_src_config_list[*]"
     for _file in ${!_list};do
-        cp -R "${!_path}/${_file}" "${outpath_bin}"
+        cp -R "${_conf_full_path}/${!_path}/${_file}" "${outpath_conf}"
     done
     
-    _path="${_conf_full_path}/pack_info_os_${os_type}_src_doc_path"
+    _path="pack_info_os_${os_type}_src_doc_path"
     _list="pack_info_os_${os_type}_src_doc_list[*]"
     for _file in ${!_list};do
-        cp -R "${!_path}/${_file}" "${outpath_bin}"
+        cp -R "${_conf_full_path}/${!_path}/${_file}" "${outpath_doc}"
     done
 }
 function CompressFile() {
@@ -170,7 +170,7 @@ function main() {
     CreateOutDirStruct "${output_path}"/"${package_name}"
     CopyFiles
 
-    CreateZipPack "${package_name}"
+    CompressFile "${package_name}"
 }
 
 main
