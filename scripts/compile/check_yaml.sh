@@ -1,6 +1,6 @@
 #!/usr/bash
-
-source ../../3rdparty/bash-yaml/script/yaml.sh
+SHELL_FOLDER=$(cd "$(dirname "$0")";pwd)
+source ${SHELL_FOLDER}/../../3rdparty/bash-yaml/script/yaml.sh
 
 filename=packing.yaml
 
@@ -20,6 +20,8 @@ function show_list() {
 
 }
 
+os_type_list=("windows" "centos")
+
 os_type=windows
 
 echo "project_name = ${project_name}"
@@ -27,29 +29,41 @@ echo "version_file = ${version_file}"
 echo "output_path = ${output_path}"
 echo "program_name = ${program_name}"
 echo "program_type = ${program_type}"
-echo "pack_info_os_windows_src_binrary_path = ${pack_info_os_windows_src_binrary_path}"
-echo "pack_info_os_windows_src_library_path = ${pack_info_os_windows_src_library_path}"
-echo "pack_info_os_windows_src_include_path = ${pack_info_os_windows_src_include_path}"
-echo "pack_info_os_windows_src_symbol_path = ${pack_info_os_windows_src_symbol_path}"
-echo "pack_info_os_windows_src_config_path = ${pack_info_os_windows_src_config_path}"
-echo "pack_info_os_windows_src_doc_path = ${pack_info_os_windows_src_doc_path}"
-show_list "${pack_info_os_windows_src_binrary_list[*]}"
-show_list "${pack_info_os_windows_src_library_list[*]}"
-show_list "${pack_info_os_windows_src_include_list[*]}"
-show_list "${pack_info_os_windows_src_symbol_list[*]}"
-show_list "${pack_info_os_windows_src_config_list[*]}"
-show_list "${pack_info_os_windows_src_doc_list[*]}"
-echo "pack_info_os_centos_src_binrary_path = ${pack_info_os_centos_src_binrary_path}"
-echo "pack_info_os_centos_src_library_path = ${pack_info_os_centos_src_library_path}"
-echo "pack_info_os_centos_src_include_path = ${pack_info_os_centos_src_include_path}"
-echo "pack_info_os_centos_src_symbol_path = ${pack_info_os_centos_src_symbol_path}"
-echo "pack_info_os_centos_src_config_path = ${pack_info_os_centos_src_config_path}"
-echo "pack_info_os_centos_src_doc_path = ${pack_info_os_centos_src_doc_path}"
-show_list "${pack_info_os_windows_src_binrary_list[*]}"
-show_list "${pack_info_os_windows_src_library_list[*]}"
-show_list "${pack_info_os_windows_src_include_list[*]}"
-show_list "${pack_info_os_windows_src_symbol_list[*]}"
-show_list "${pack_info_os_windows_src_config_list[*]}"
-show_list "${pack_info_os_windows_src_doc_list[*]}"
-_path="pack_info_os_${os_type}_src_binrary_path"
-echo "pack_info_os_${os_type}_src_binrary_path = ${!_path}"
+
+for os_type in ${os_type_list[*]};do
+    _os_name="pack_info_system_${os_type}_name"
+    if [ -z ${${!_os_name}+x} ];then
+        echo "[Error] No ${os_type} corresponding configuration is available"
+        continue
+    fi
+    echo "-------- ${os_type} --------"
+    _path="pack_info_os_${os_type}_src_binrary_path"
+    _list="pack_info_os_${os_type}_src_binrary_list[*]"
+    echo "${_path} = ${!_path}"
+    show_list "${!_list}"
+    
+    _path="pack_info_os_${os_type}_src_library_path"
+    _list="pack_info_os_${os_type}_src_library_list[*]"
+    echo "${_path} = ${!_path}"
+    show_list "${!_list}"
+    
+    _path="pack_info_os_${os_type}_src_include_path"
+    _list="pack_info_os_${os_type}_src_include_list[*]"
+    echo "${_path} = ${!_path}"
+    show_list "${!_list}"
+    
+    _path="pack_info_os_${os_type}_src_symbol_path"
+    _list="pack_info_os_${os_type}_src_symbol_list[*]"
+    echo "${_path} = ${!_path}"
+    show_list "${!_list}"
+    
+    _path="pack_info_os_${os_type}_src_config_path"
+    _list="pack_info_os_${os_type}_src_config_list[*]"
+    echo "${_path} = ${!_path}"
+    show_list "${!_list}"
+    
+    _path="pack_info_os_${os_type}_src_doc_path"
+    _list="pack_info_os_${os_type}_src_doc_list[*]"
+    echo "${_path} = ${!_path}"
+    show_list "${!_list}"
+done
