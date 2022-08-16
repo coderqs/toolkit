@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+#set -e
 SHELL_FOLDER=$(cd "$(dirname "$0")";pwd)
 
 #source ${SHELL_FOLDER}/../general/clog_print.sh
@@ -19,8 +19,8 @@ outpath_conf=
 outpath_doc=
 
 function LoadYamlScript() {
-    source ${SHELL_FOLDER}../../3rdparty/bash-yaml/script/yaml.sh
-    if [ $? ];then 
+    source ${SHELL_FOLDER}/../../3rdparty/bash-yaml/script/yaml.sh
+    if [ ! $? ];then 
         wget https://raw.githubusercontent.com/jasperes/bash-yaml/master/script/yaml.sh
         source yaml.sh
         if [ $? ];then
@@ -31,7 +31,7 @@ function LoadYamlScript() {
 
 function ReadConfig() {
     LoadYamlScript
-    parse_yaml "${program_config}"
+    parse_yaml "${program_config}" >/dev/null 2>&1
     create_variables "${program_config}"
     
     # variable name list
@@ -90,8 +90,8 @@ function CreateOutDirStruct() {
     return 0
 }
 function CheckOsConfig() {
-    _os_name="pack_info_system_${os_type}_name"
-    if [ -z ${${!_os_name}+x} ];then
+    _os_name="pack_info_os_${os_type}_name"
+    if [ -z ${!_os_name+x} ];then
         echo "[Error] No ${os_type} corresponding configuration is available"
         exit 2
     fi
@@ -118,37 +118,55 @@ function CopyFiles() {
     _path="pack_info_os_${os_type}_src_binrary_path"
     _list="pack_info_os_${os_type}_src_binrary_list[*]"
     for _file in ${!_list};do
-        cp -R "${_conf_full_path}/${!_path}/${_file}" "${outpath_bin}"
+        if [ -a "${_conf_full_path}/${!_path}/${_file}" ]; then
+            cp -R "${_conf_full_path}/${!_path}/${_file}" "${outpath_bin}"
+            echo "copy file form ${_conf_full_path}/${!_path}/${_file} to ${outpath_bin}"
+        fi
     done
     
     _path="pack_info_os_${os_type}_src_library_path"
     _list="pack_info_os_${os_type}_src_library_list[*]"
     for _file in ${!_list};do
-        cp -R "${_conf_full_path}/${!_path}/${_file}" "${outpath_lib}"
+        if [ -a "${_conf_full_path}/${!_path}/${_file}" ]; then
+            cp -R "${_conf_full_path}/${!_path}/${_file}" "${outpath_lib}"
+            echo "copy file form ${_conf_full_path}/${!_path}/${_file} to ${outpath_lib}"
+        fi
     done
     
     _path="pack_info_os_${os_type}_src_include_path"
     _list="pack_info_os_${os_type}_src_include_list[*]"
     for _file in ${!_list};do
-        cp -R "${_conf_full_path}/${!_path}/${_file}" "${outpath_inc}"
+        if [ -a "${_conf_full_path}/${!_path}/${_file}" ]; then
+            cp -R "${_conf_full_path}/${!_path}/${_file}" "${outpath_inc}"
+            echo "copy file form ${_conf_full_path}/${!_path}/${_file} to ${outpath_inc}"
+        fi
     done
     
     _path="pack_info_os_${os_type}_src_symbol_path"
     _list="pack_info_os_${os_type}_src_symbol_list[*]"
     for _file in ${!_list};do
-        cp -R "${_conf_full_path}/${!_path}/${_file}" "${outpath_symbol}"
+        if [ -a "${_conf_full_path}/${!_path}/${_file}" ]; then
+            cp -R "${_conf_full_path}/${!_path}/${_file}" "${outpath_symbol}"
+            echo "copy file from ${_conf_full_path}/${!_path}/${_file} to ${outpath_symbol}"
+        fi
     done
     
     _path="pack_info_os_${os_type}_src_config_path"
     _list="pack_info_os_${os_type}_src_config_list[*]"
     for _file in ${!_list};do
-        cp -R "${_conf_full_path}/${!_path}/${_file}" "${outpath_conf}"
+        if [ -a "${_conf_full_path}/${!_path}/${_file}" ]; then
+            cp -R "${_conf_full_path}/${!_path}/${_file}" "${outpath_conf}"
+            echo "copy file form ${_conf_full_path}/${!_path}/${_file} to ${outpath_conf}"
+        fi
     done
     
     _path="pack_info_os_${os_type}_src_doc_path"
     _list="pack_info_os_${os_type}_src_doc_list[*]"
     for _file in ${!_list};do
-        cp -R "${_conf_full_path}/${!_path}/${_file}" "${outpath_doc}"
+        if [ -a "${_conf_full_path}/${!_path}/${_file}" ]; then
+            cp -R "${_conf_full_path}/${!_path}/${_file}" "${outpath_doc}"
+            echo "copy file form ${_conf_full_path}/${!_path}/${_file} to ${outpath_doc}"
+        fi
     done
 }
 function CompressFile() {
@@ -157,8 +175,14 @@ function CompressFile() {
         exit 3
     fi
     _package_name="$1"
-    zip -qr "${_package_name}.zip" "${_package_name}"
+    zip -qr "${_package_name}.zip" "${output_path}"/"${_package_name}" 
+    if [ $? ]; then
+        echo "generate compress file ${_package_name}.zip"
+    fi
     return 0
+}
+function ClearCache() {
+    rm -rf $1
 }
 function main() {
     ReadConfig
@@ -170,6 +194,7 @@ function main() {
     CopyFiles
 
     CompressFile "${package_name}"
+    ClearCache "${output_path}"/"${package_name}"
 }
 
 main
