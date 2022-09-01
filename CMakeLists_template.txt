@@ -7,14 +7,15 @@ include(${CMAKE_SOURCE_DIR}/cmake/generate_version_file.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/common_base_setting.cmake)
 
 # base setting
-if (NOT DEFINED OUTPUT_NAME)
-    set(OUTPUT_NAME ${PROJECT_NAME})
+if (NOT DEFINED PROGRAM_TARGET_NAME)
+    set(PROGRAM_TARGET_NAME ${PROJECT_NAME})
 endif()
+message(STATUS, ${PROGRAM_TARGET_NAME})
+
 set(PATH_DPD_INCLUDE $ENV{DROOT}/include)
 set(PATH_DPD_LIBRARY $ENV{DROOT}/lib)
 message(STATUS, ${PATH_DPD_INCLUDE})
 message(STATUS, ${PATH_DPD_LIBRARY})
-message(STATUS, ${OUTPUT_NAME})
 
 include_directories(${PATH_DPD_INCLUDE})
 link_directories(${PATH_DPD_LIBRARY})
@@ -54,17 +55,17 @@ if (BUILD_EXECUTABLE)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
     
-    add_executable(${OUTPUT_NAME} ${PROJEST_SOURCES})
+    add_executable(${PROGRAM_TARGET_NAME} ${PROJEST_SOURCES})
 else() 
     if (BUILD_SHARED_LIBS)
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-        add_library(${OUTPUT_NAME} SHARED ${PROJEST_SOURCES})
+        add_library(${PROGRAM_TARGET_NAME} SHARED ${PROJEST_SOURCES})
         
     else()
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-        add_library(${OUTPUT_NAME} STATIC ${PROJEST_SOURCES})
+        add_library(${PROGRAM_TARGET_NAME} STATIC ${PROJEST_SOURCES})
         
     endif() # if (BUILD_SHARED_LIBS)
 endif() # if (BUILD_EXECUTABLE)
@@ -72,10 +73,10 @@ endif() # if (BUILD_EXECUTABLE)
 message(STATUS "CMAKE_C_FLAGS: ${CMAKE_C_FLAGS}")
 message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 
-target_link_libraries(${OUTPUT_NAME} ${LINK_LIB_LIST})
+target_link_libraries(${PROGRAM_TARGET_NAME} ${LINK_LIB_LIST})
 
 ## install
-install(TARGETS ${OUTPUT_NAME}
+install(TARGETS ${PROGRAM_TARGET_NAME}
         LIBRARY DESTINATION lib  # shared library install path
         ARCHIVE DESTINATION lib  # static library install path
         RUNTIME DESTINATION bin  # executable program install path

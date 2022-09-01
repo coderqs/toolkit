@@ -1,22 +1,24 @@
 cmake_minimum_required(VERSION 3.2)
 
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
-
-include(common_base_setting)
-
 project(toolkit CXX)
 
-set(OPERATING_SYSTEM "${CMAKE_SYSTEM_NAME}")
-set(OS "\"${CMAKE_SYSTEM_NAME}\"")
+include(common_base_setting)
+include(generate_version_file)
 
 if (NOT DEFINED PROGRAM_TARGET_NAME)
     set(PROGRAM_TARGET_NAME ${PROJECT_NAME})
 endif()
 message(STATUS "program target name: ${PROGRAM_TARGET_NAME}")
 
-include_directories(${CURL_SOURCE_DIR})
-include_directories(${CURL_SOURCE_DIR}/include)
-include_directories(${CURL_SOURCE_DIR}/src)
+set(PATH_DPD_INCLUDE $ENV{DROOT}/include)
+set(PATH_DPD_LIBRARY $ENV{DROOT}/lib)
+
+include_directories(${PATH_DPD_INCLUDE})
+link_directories(${PATH_DPD_LIBRARY})
+
+include_directories(${CMAKE_SOURCE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(${CMAKE_SOURCE_DIR}/src)
 
 #if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_CLANG)
 #  if(PICKY_COMPILER)
@@ -41,25 +43,6 @@ include_directories(${CURL_SOURCE_DIR}/src)
 #  endif()
 #endif()
 
-include(generate_version_file)
-include(CMakeDependentOption)
-
-cmake_dependent_option(BUILD_TESTING "Build tests"
-  ON "PERL_FOUND;NOT TOOLKIT_DISABLE_TESTS"
-  OFF)
-if(BUILD_TESTING)
-  add_subdirectory(test)
-endif()
-
-cmake_dependent_option(BUILD_TESTING "Build samples"
-  ON "PERL_FOUND;NOT TOOLKIT_DISABLE_SAMPLES"
-  OFF)
-if(BUILD_SAMPLES)
-  add_subdirectory(samples)
-endif()
-
-set(LINK_LIB_LIST "")
-
 ## link library list
 if (TARGET_PLATFORM AND (TARGET_PLATFORM STREQUAL ""))
     set(LINK_LIB_LIST 
@@ -80,7 +63,7 @@ else()
 endif()
 
 ## source code
-aux_source_directory("${CMAKE_CURRENT_SOURCE_DIR}/src" PROJEST_SOURCES)
+aux_source_directory("${CMAKE_CURRENT_SOURCE_DIR}" PROJEST_SOURCES)
 ### other methods
 # set(PROJEST_SOURCES 
 #   enumerate the files here
