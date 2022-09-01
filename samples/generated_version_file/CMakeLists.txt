@@ -9,6 +9,6 @@ set(PROJECT_SOURCE
 )
 
 include_directories(${CMAKE_SOURCE_DIR})
-include_directories(${CMAKE_SOURCE_DIR}/toolkit)
+include_directories(${CMAKE_SOURCE_DIR}/src)
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCE})

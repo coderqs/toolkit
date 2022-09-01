@@ -11,8 +11,9 @@ cd ${script_dir}
 
 project_name="${1:-""}"
 project_name=$(echo ${project_name} | tr 'a-z' 'A-Z')
-source_path="${2:-"../src"}"
-version_file="../VERSION"
+source_path="${2:-"../../src"}"
+version_file="../../VERSION"
+need_version_cpp="${3:-1}"
 
 revision_num=
 repository=
@@ -36,7 +37,17 @@ program_version_revision=
 function ShwoInfo(){
     echo "project_name: ${project_name}"
     echo "repository: ${repository} revision_num: ${revision_num}"
-    echo "version: ${program_version_major}.${program_version_minor}.${program_version_patch}.${program_version_build}.${program_version_revision}"
+    _version=
+    if [ -z ${program_version_build} ];then
+        _version="${program_version_major}.${program_version_minor}.${program_version_patch}"
+    else
+        if [ -z ${program_version_revision} ];then
+            _version="${program_version_major}.${program_version_minor}.${program_version_patch}.${program_version_build}"
+        else
+            _version="${program_version_major}.${program_version_minor}.${program_version_patch}.${program_version_build}.${program_version_revision}"
+        fi
+    fi
+    echo "version: ${_version}"
 }
 
 function GetVersion(){
@@ -53,81 +64,42 @@ function GetVersion(){
     program_version_patch=${PATCH}
     declare `grep BUILD ${version_file}` 
     program_version_build=${BUILD}
-    #declare `grep REVISION ${version_file}` 
-    #program_version_revision=${REVISION}
+    declare `grep REVISION ${version_file}` 
+    program_version_revision=${REVISION}
 }
 
 function GenerateVersionHeadFile(){
     file_version_h=${source_path}/version.h
+    cp ${script_dir}/../../version.h.in ${file_version_h}   
 
     GetVersion 
 
-    cat>"${file_version_h}"<<EOF
-#ifndef ${project_name}__VERSION_H_
-#define ${project_name}__VERSION_H_
+    upper_project_name=`printf '%s' "${project_name^^}"`
+    echo "${upper_project_name}"
 
-#define PROGRAM_NAME "${project_name}"
-#define REPOSITORY "${repository}"
-#define REVISION_NUM "${revision_num}"
-
-#define PROGRAM_VERSION_MAJOR "${program_version_major}" 
-#define PROGRAM_VERSION_MINOR "${program_version_minor}"  
-#define PROGRAM_VERSION_PATCH "${program_version_patch}"
-#define PROGRAM_VERSION_BUILD "${program_version_build}"
-#define PROGRAM_VERSION_REVISION "${program_version_revision}"
-
-#endif // ${project_name}__VERSION_H_
-EOF
+    sed -i "s/@UPPERCASE_PROJECT_NAME@/${upper_project_name}/g" ${file_version_h}
+    sed -i "s/@PROJECT_NAME@/${project_name}/g" ${file_version_h}
+    sed -i "s/@REPOSITORY@/${repository}/g" ${file_version_h}
+    sed -i "s/@REVISION_NUM@/${revision_num}/g" ${file_version_h}
+    sed -i "s/@VERSION_MAJOR@/${program_version_major}/g" ${file_version_h}
+    sed -i "s/@VERSION_MINOR@/${program_version_minor}/g" ${file_version_h}
+    sed -i "s/@VERSION_PATCH@/${program_version_patch}/g" ${file_version_h}
+    sed -i "s/@VERSION_BUILD@/${program_version_build}/g" ${file_version_h}
+    sed -i "s/@VERSION_REVISION@/${program_version_revision}/g" ${file_version_h}
 }
 
 function GenerateVersionCppFile(){
     file_version_cpp=${source_path}/version.cpp
-
-    GenerateVersionHeadFile
-
-    cat>"${file_version_cpp}"<<EOF
-#include "version.h" 
-#ifdef __linux__
-#ifdef __x86_64__
-const char interp[] __attribute__((section(".interp"))) = "/lib64/ld-linux-x86-64.so.2";
-#else
-const char interp[] __attribute__((section(".interp"))) = "/lib/ld-linux.so.2";
-#endif // __x86_64__
-#include <unistd.h>
-
-static const char banner[] =
-PROGRAM_NAME " " PROGRAM_VERSION_MAJOR "." PROGRAM_VERSION_MINOR "." PROGRAM_VERSION_PATCH \\
-#if PROGRAM_VERSION_BUILD
-"." PROGRAM_VERSION_BUILD \\
-#endif
-#if PROGRAM_VERSION_REVISION
-"." PROGRAM_VERSION_REVISION \\
-#endif 
-"\n" \\
-"Build in " __DATE__ __TIME__ " (for Linux platform)\n" \\
-"Managed on " REPOSITORY " revision num: " REVISION_NUM "\n" \\
-"Copyright (C) all rights reserved \n";
-
-extern void __libc_print_version (void); 
-void __libc_print_version (void) {
-  write (STDOUT_FILENO, banner, sizeof banner - 1);
-}
-
-/* This function is the entry point for the shared object. 
-   Running the library as a program will get here.  */
-
-extern void __libc_main (void) __attribute__ ((noreturn));
-void __libc_main (void) {
-  __libc_print_version ();
-  _exit (0);
-}
-
-#endif // __linux__
-EOF
+    cp ${script_dir}/../../library_main.cpp ${file_version_cpp}    
 }
 
 function main() {
-    GenerateVersionCppFile
+    GenerateVersionHeadFile
+
+    if [ $need_version_cpp ];then
+        GenerateVersionCppFile
+    fi
+
     ShwoInfo
 }
 
