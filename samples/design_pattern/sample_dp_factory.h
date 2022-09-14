@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#include "DesignPattern/Factory.h"
+#include "toolkit/design_pattern/factory.h"
 
 class ProductA : public AbstractProduct {
 public:

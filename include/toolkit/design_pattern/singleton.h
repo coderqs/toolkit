@@ -22,6 +22,7 @@ public:
     Singleton(const T&) = delete;
     void operator=(const T&) = delete;
 
+    friend T;
 protected:
     Singleton() = default;
     virtual ~Singleton() = default;
