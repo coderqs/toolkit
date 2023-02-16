@@ -7,8 +7,9 @@ cd ${script_dir}
 
 source ../general/clog_print.sh
 
-optims
-
+optims="release"
+has_addr_check=false
+has_debug_info=false
 # 编译(批量？)
 
 # 检查
@@ -22,9 +23,11 @@ function HasAddrCheck() {
     fi
 
     if [ optim == "release" && has_addr_check == true ];then
-        
+        return 1;
     elif [ optim == "debug" && has_addr_check == false ]
-        
+        return 1;
+    else
+        return 0;
     fi
 } 
 ## release 与 debug 分辨

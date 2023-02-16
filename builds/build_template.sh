@@ -57,4 +57,4 @@ bash ${PROJECT_ROOT}/scripts/program_packing.sh ${TARGET_PLATFORM} x64 release
 #      -DTARGET_PLATFORM=${TARGET_PLATFORM}
 #
 ## ±‡“Î iphoneos Release ∞Ê±æ
-# xcodebuild -project ${PROJECT_NAME}.xcodeproj -alltargets -sdk iphoneos -configuration Release
+# xcodebuild -project ${PROJECT_NAME}.xcodeproj -alltargets -sdk iphoneos -configuration Release DEVELOPMENT_TEAM=""

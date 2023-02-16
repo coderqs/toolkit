@@ -5,11 +5,16 @@ SHELL_FOLDER=$(cd "$(dirname "$0")";pwd)
 
 #source ${SHELL_FOLDER}/../general/clog_print.sh
 
-os_type="${1:-"linux"}"
+os_type="${1:-""}"
 arch_type="${2:-"x64"}"
 optim="${3:-"release"}"
 program_version="${4:-""}"
 program_config="${5:-"packing.yaml"}"
+
+if [ -z os_type ]; then
+    echo "[ERROR] os_type can't be empty!"
+    exit 4
+fi
 
 outpath_bin=
 outpath_lib=
