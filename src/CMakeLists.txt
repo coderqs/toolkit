@@ -82,7 +82,7 @@ if (BUILD_EXECUTABLE)
 else() 
     if (BUILD_SHARED_LIBS)
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
         add_library(${PROGRAM_TARGET_NAME} SHARED ${PROJEST_SOURCES})
         
     else()

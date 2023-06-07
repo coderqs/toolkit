@@ -49,7 +49,7 @@ message(STATUS, ${PROJEST_SOURCES})
 
 ## compile option
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -pthread -Wl,-rpath=.") # -Wl,-Bsymbolic -Wno-invalid-offsetof -fvisibility=hidden --no-gnu-unique -fsanitize=address
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wl,-rpath=. -Wl,-Bsymbolic -fvisibility=hidden")
 
 if (BUILD_EXECUTABLE)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
@@ -59,7 +59,7 @@ if (BUILD_EXECUTABLE)
 else() 
     if (BUILD_SHARED_LIBS)
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
         add_library(${PROGRAM_TARGET_NAME} SHARED ${PROJEST_SOURCES})
         
     else()
